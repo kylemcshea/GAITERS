@@ -1,9 +1,10 @@
 //Ultrasonic Sensor #1
-const int trigPin[] = {7, 13}; // Trigger Pin of Ultrasonic Sensor(s)
-const int echoPin[] = {6, 12}; // Echo Pin of Ultrasonic Sensor(s)
+const int trigPin[] = {2,4,6,8,10,12}; // Trigger Pin of Ultrasonic Sensor(s)
+const int echoPin[] = {3,5,7,9,11,13}; // Echo Pin of Ultrasonic Sensor(s)
 
+//blue->white->yellow->orange->yell/orng->blue/black
 //indicate # of sensors
-const int numberOfSensors = 2;
+const int numberOfSensors = 6;
 
 int counter = 0;
 int base[numberOfSensors];
@@ -35,18 +36,19 @@ void loop() {
   for(int i = 0; i < numberOfSensors; i++){
     distancePrev[i] =distance[i];
     distance[i] = getDistance(trigPin[i], echoPin[i]);
-    if(counter > 20){
+    if(counter > 100){
       if(distance[i] > 1.5*base[i]){
         distance[i] = distancePrev[i];
         Serial.print("Reseting to previous distance at sensor " + String(i));
       }
     }
-    if(counter < 20){
+    if(counter < 100){
       base[i]+= distance[i];
     }
-    if(counter == 20){
-      base[i]/=20;
+    if(counter == 100){
+      base[i]/=100;
       Serial.println("BASE " + String(i) + " = " + String(base[i]));
+      delay(2000);
     }
   }
   Serial.print("["+String(counter)+"] ");
