@@ -1,9 +1,10 @@
-import serial
+#import serial
 import time
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 import seaborn as sns
+import datetime
 
 ser = serial.Serial('COM5',9600)
 time.sleep(2)
@@ -29,5 +30,8 @@ for col in range(1, len(data[0])):
 data = np.array(data)
 df = pd.DataFrame(data, columns = column)
 dfnotefic = df.drop("Count", axis=1)
+now = datetime.datetime.now()
+csv_file = str(now.year) + "_" + str(now.month) + "_" + str(now.day) + "_" + str(now.hour) + "_" + str(now.minute) + ".csv"
+dfnotefic.to_csv(csv_file)
 sns.scatterplot(data= dfnotefic)
 plt.show()
