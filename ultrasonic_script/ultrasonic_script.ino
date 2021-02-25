@@ -4,12 +4,15 @@
 
 //String fileName;
 
-const int trigPin[] = {2,4,6,8,10,12}; // Trigger Pin of Ultrasonic Sensor(s)
-const int echoPin[] = {3,5,7,9,11,13}; // Echo Pin of Ultrasonic Sensor(s)
+//TODO => Set up VS code on computer
+//TODO => Make it so that echoPin / TrigPin iterate odds/evens
+
+const int echoPin[] = {2,4,6,8}; // Trigger Pin of Ultrasonic Sensor(s)
+const int trigPin[] = {3,5,7,9}; // Echo Pin of Ultrasonic Sensor(s)
 
 //blue->white->yellow->orange->yell/orng->blue/black
 //indicate # of sensors
-const int numberOfSensors = 6;
+const int numberOfSensors = 4;
 
 int counter = 0;
 int base[numberOfSensors];
@@ -38,13 +41,17 @@ int getDistance(int trigPin, int echoPin){
   distanceTemp = (duration*.0343)/2;
   return distanceTemp;
 }
+//TODO => Figure out what the best delay time is to create "perfect" readings
 void loop() {
   //Ultrasonic Sensor functions
   //TableRow newRow = dataTable.addRow(); //Create row for input 
   //newRow.setInt("Count",counter); //Indicates what count readings are for in csv
   for(int i = 0; i < numberOfSensors; i++){ //Grabs distance from each sensor
+    //saves distance previous as fallback in case this reading is noisey
+    //can definitely do this better, should use something like distance[i-1]
     distancePrev[i] =distance[i];
     distance[i] = getDistance(trigPin[i], echoPin[i]);
+    //TODO => Set a thresh hold for how many counts we want to set as baseline
     if(counter > 100){
       if(distance[i] > 1.5*base[i]){
         distance[i] = distancePrev[i];
@@ -52,9 +59,12 @@ void loop() {
       }
     }
     //newRow.setInt("Sensor ["+String(i)+"]",distance[i]);
+    
+    //TODO => make sure this 100 as well is modularized in threshold
     if(counter < 100){
       base[i]+= distance[i];
     }
+    //TODO => Same with this one
     if(counter == 100){
       base[i]/=100;
       Serial.println("BASE " + String(i) + " = " + String(base[i]));
@@ -71,5 +81,6 @@ void loop() {
     //saveTable(dataTable,fileName);
   //}
   counter++;
+  //TODO => Need to find the right delay time. Set as variable so its easy to test.
   delay(200);
 }

@@ -1,4 +1,4 @@
-#import serial
+import serial
 import time
 import numpy as np
 import pandas as pd
@@ -10,16 +10,17 @@ ser = serial.Serial('COM5',9600)
 time.sleep(2)
 b=ser.readline()
 data = []
-for i in range(5):
+for i in range(50):
     b=ser.readline()
     string_n = b.decode()
     s = string_n.rstrip()
     s = s.split("|")
     s=s[:-1]
     lineOfTable = [float(s[0])]
+    print(s)
     for a in range(1,len(s)):
         lineOfTable.append(float(s[a][11:]))
-    lintOfTable = np.array(lineOfTable)
+    lineOfTable = np.array(lineOfTable)
     data.append(lineOfTable)
 
 #data = [np.array([0, 242.0, 234.0, 242.0,240.0,239.0]), np.array([1, 240.0, 233.0, 240.0,242.0,241.0]), np.array([2, 232.0, 134.0, 240.0,237.0,235.0]), np.array([3, 245.0, 240.0, 242.0,241.0,220.0]), np.array([4, 244.0, 244.0, 243.0,241.0,240.0]), np.array([5, 239.0, 140.0, 240.0,241.0,229.0])]
