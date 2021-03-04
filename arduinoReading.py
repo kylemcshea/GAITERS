@@ -1,4 +1,4 @@
-import serial
+from serial import Serial
 import time
 import numpy as np
 import pandas as pd
@@ -6,11 +6,11 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 import datetime
 
-ser = serial.Serial('COM5',9600)
-time.sleep(2)
+ser = Serial("/dev/cu.usbmodem14201",9600)
+time.sleep(1)
 b=ser.readline()
 data = []
-for i in range(50):
+for i in range(300):
     b=ser.readline()
     string_n = b.decode()
     s = string_n.rstrip()
