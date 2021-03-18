@@ -13,11 +13,13 @@ const int trigPin[] = {53,51,49,47,45,43,41,39,37,35,33,31,29,27,25,23}; // Echo
 //blue->white->yellow->orange->yell/orng->blue/black
 //indicate # of sensors
 const int numberOfSensors = 16;
+const int buttonPin = 7;
 
 int counter = 0;
 int base[numberOfSensors];
+int buttonState;
 
-float distance[numberOfSensors];
+int distance[numberOfSensors];
 //float distancePrev[numberOfSensors];
 
 void setup() {
@@ -27,11 +29,13 @@ void setup() {
     pinMode(echoPin[i],INPUT);
     //table.addColumn("Sensor ["+String(i)+"]");
   }
+  pinMode(buttonPin, INPUT);
+  digitalWrite(buttonPin, HIGH);
   Serial.begin(9600); // Starting Serial Terminal
 }
 //Grabs distance from sensor reading
 int getDistance(int trigPin, int echoPin){
-  float duration, distanceTemp;
+  int duration, distanceTemp;
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
   digitalWrite(trigPin, HIGH);
@@ -71,10 +75,18 @@ void loop() {
       //delay(2000);
     //}
   }
+  buttonState = digitalRead(buttonPin);
   Serial.print(String(counter)+"| ");
   for(int j = 0; j < numberOfSensors; j++){
     Serial.print("Sensor " + String(j) + ": " + String(distance[j]) + " | ");
   }
+  if(buttonState == HIGH){
+    Serial.print("Output: 0|");
+  }
+  else{
+    Serial.print("Output: 1|");
+  }
+  
   Serial.println();
   //if(Counter%numReadings == 0){
     //fileName = String(year())+ String(month())+String(day()) + String(Counter/numReadings);
